@@ -37,12 +37,12 @@ colorTimeBlock();
 
   $(".saveBtn").click(function (event) {
         event.stopImmediatePropagation();
-        let hourBlock = $(this).attr("data-click");
-        let userText = $("#timeText-" + hourBlock).val();
+        var hourBlock = $(this).attr("data-click");
+        var userText = $("#timeText-" + hourBlock).val();
         console.log(userText);
         
-        let userTextObject = {
-          user: userText,
+        var userTextObject = {
+          userText: userText,
           hour: hourBlock,
         };
 
@@ -55,9 +55,12 @@ colorTimeBlock();
 function loadUserText() {
   if (localStorage.getItem("userTextArray") !== null) {
   var storedText = JSON.parse(localStorage.getItem("userTextArray"));
-  console.log(storedText);
   for (var i=0; i < storedText.length; i++) {
-    $("#timeText-" + storedText[i].time).val(storedText[i].userTextArray);
+    $("#timeText-" + storedText[i].currentTime).val(storedText[i].userTextArray);
+    var userTextObject = {
+      userText: userTextArray,
+      hour: storedText,
+    }
   }
   }
 }
