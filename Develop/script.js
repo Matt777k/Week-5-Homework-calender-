@@ -1,44 +1,65 @@
 
+$("#currentDay").text(moment().format("LLLL"));
+
+//Scrolling down presents time blocks of standard business hours (9am-5pm)
+  //break into 1 hour blocks
 
 
+//each time block is color coded to indicate whether it is in the past, present, or future
 
-// //Scrolling down presents time blocks of standard business hours (9am-5pm)
-//     //break into 1 hour blocks
-// //console.log(moment.duration(60, 'minutes').hours());
-// //each time block is color coded to indicate whether it is in the past, present, or future
-// function colorTimeBlock() {
-//     for (i = 0; i < 9; i++) {
-//       let blockTime = $("#hour-" + i);
-//       let dataHour = blockTime.attr("data-hour");
-//       let colorBlock = $("#timeText-" + i);
-//       if (currentTime > dataHour) {
-//         colorBlock.attr("class", "col-8 text past description");
-//       } else if (currentTime == dataHour) {
-//         colorBlock.attr("class", "col-8 text present description");
-//       } else {
-//         colorBlock.attr("class", "col-8 text future description");
-//       }
-//     }
-// }
-// colorTimeBlock();
+var currentTime = moment().hours();
+var userTextArray = [];
 
-// // $(".calender-rows").ready(function (){
-// //     for(var i=0; i<timeArray.length; i++) {
-// //         console.log(timeArray[i]);
-// //        if(dateAndTime == timeArray[i]) {
-
-// //     }
-// //     }
-// // })
+function colorTimeBlock() {
+    for (i = 9; i <= 17; i++) {
+      var blockTime = $("#hour-" + i);
+      var colorBlock = $("#timeText-" + i);
+      var dataHour = blockTime.attr("data-hour");
+      if (currentTime > dataHour) {
+        colorBlock.attr("class", "col-8 text past description");
+      } else if (currentTime == dataHour) {
+        colorBlock.attr("class", "col-8 text present description");
+      } else if (currentTime < dataHour) {
+        colorBlock.attr("class", "col-8 text future description");
+      }
+      else {
+        colorBlock.attr("class", "col-8 text past description");
+      }
+    }
+}
+colorTimeBlock();
 
 
-
-//     //past is gray, present is red, future is green
-//     //if dateAndTime is greater than time of the blocks, turn grey
-//     //if dateAndTime is within the same hour of the block, turn red
-//     //if dateAndTime is less than time of the blocks, turn green
 //     Clicking in to a time block 
-//     //you cant enter an event
+//     //you can enter an event
 //     //click save button for that timeblock (saves to loval storage)
 //     saved events persist through page refresh
+
+  $(".saveBtn").click(function (event) {
+        event.stopImmediatePropagation();
+        let hourBlock = $(this).attr("data-click");
+        let userText = $("#timeText-" + hourBlock).val();
+        console.log(userText);
+        
+        let userTextObject = {
+          user: userText,
+          hour: hourBlock,
+        };
+
+        
+        userTextArray.push(userTextObject);
+        localStorage.setItem("userTextArray", JSON.stringify(userTextArray));
+        
+});
+
+function loadUserText() {
+  if (localStorage.getItem("userTextArray") !== null) {
+  var storedText = JSON.parse(localStorage.getItem("userTextArray"));
+  console.log(storedText);
+  for (var i=0; i < storedText.length; i++) {
+    $("#timeText-" + storedText[i].time).val(storedText[i].userTextArray);
+  }
+  }
+}
+loadUserText();
 
